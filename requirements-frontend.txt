@@ -1,0 +1,5 @@
+# Frontend-only requirements — used by Streamlit Community Cloud.
+streamlit==1.33.0
+requests==2.32.3
+python-dotenv==1.0.1
+Pillow==10.3.0

@@ -1,0 +1,7 @@
+[server]
+# Disable file-watcher in production (not needed on Streamlit Community Cloud)
+runOnSave = false
+
+[browser]
+# Suppress the "Please wait..." Streamlit branding on load
+gatherUsageStats = false

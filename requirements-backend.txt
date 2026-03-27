@@ -1,0 +1,16 @@
+# Backend-only requirements — used by Railway.
+# Includes torch/transformers for CLIP-based image search at query time.
+# Note: Railway build will take ~15 min on first deploy due to torch download.
+# For local development, use requirements.txt instead.
+
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+anthropic>=0.40.0
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+Pillow==10.3.0
+python-dotenv==1.0.1
+pyarrow>=14.0.0
+torch==2.3.0
+transformers==4.40.0
