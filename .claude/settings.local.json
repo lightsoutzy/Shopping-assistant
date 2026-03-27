@@ -17,7 +17,8 @@
       "Bash(find C:/Users/taoyo/commerce_agent -type f -not -path */__pycache__/* -not -name *.pyc -not -path */.pytest_cache/*)",
       "Bash(wc -l C:/Users/taoyo/commerce_agent/data/catalog_thumbnails/*.jpg)",
       "Bash(ls -1 C:/Users/taoyo/commerce_agent/data/catalog_thumbnails/*.jpg)",
-      "WebFetch(domain:pypi.org)"
+      "WebFetch(domain:pypi.org)",
+      "Bash(xargs ls:*)"
     ]
   }
 }
