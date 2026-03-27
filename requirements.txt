@@ -1,6 +1,6 @@
 # Frontend-only requirements — installed by Streamlit Community Cloud.
 # Backend/Railway uses requirements-backend.txt (via Dockerfile).
 # Local full-stack development: pip install -r requirements.txt -r requirements-backend.txt
-streamlit==1.33.0
+streamlit==1.40.0
 requests==2.32.3
 python-dotenv==1.0.1
