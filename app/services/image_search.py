@@ -49,12 +49,14 @@ def search_by_image(
     """
     import torch
 
+    device = next(model.parameters()).device
     inputs = processor(images=[query_image], return_tensors="pt")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
     with torch.no_grad():
         vec = model.get_image_features(**inputs)
         vec = vec / vec.norm(dim=-1, keepdim=True)  # L2-normalize
 
-    query_vec = vec.numpy().astype(np.float32)  # [1, 512]
+    query_vec = vec.cpu().numpy().astype(np.float32)  # [1, 512]
 
     # Cosine similarity: since both sides are L2-normalized, dot product == cosine
     scores = (index.embeddings @ query_vec.T).flatten()  # [N]
@@ -216,9 +218,13 @@ def rerank_image_results(
 
 
 def load_clip_model(model_name: str = "openai/clip-vit-base-patch32"):
-    """Load CLIP processor and model. Call once at startup."""
+    """Load CLIP processor and model onto the best available device. Call once at startup."""
+    import torch
     from transformers import CLIPModel, CLIPProcessor
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     processor = CLIPProcessor.from_pretrained(model_name)
     model = CLIPModel.from_pretrained(model_name)
     model.eval()
+    model = model.to(device)
+    print(f"  CLIP model loaded on {device}.", flush=True)
     return processor, model

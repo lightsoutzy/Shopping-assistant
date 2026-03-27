@@ -38,11 +38,14 @@ def main() -> None:
     df = pd.read_parquet(CATALOG_PATH)
     print(f"Loaded catalog: {len(df):,} products")
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     model_name = "openai/clip-vit-base-patch32"
-    print(f"Loading CLIP model ({model_name}) ...")
+    print(f"Loading CLIP model ({model_name}) on {device} ...")
     processor = CLIPProcessor.from_pretrained(model_name)
     model = CLIPModel.from_pretrained(model_name)
     model.eval()
+    model = model.to(device)
 
     all_vecs: list[np.ndarray] = []
     all_ids: list[int] = []
@@ -50,7 +53,7 @@ def main() -> None:
     batch_size = 16
     rows = df.to_dict("records")
 
-    print(f"Encoding {len(rows):,} images (CPU, batch_size={batch_size}) ...")
+    print(f"Encoding {len(rows):,} images ({device}, batch_size={batch_size}) ...")
     for i in range(0, len(rows), batch_size):
         batch = rows[i : i + batch_size]
         images, valid_ids = [], []
@@ -67,11 +70,12 @@ def main() -> None:
             continue
 
         inputs = processor(images=images, return_tensors="pt", padding=True)
+        inputs = {k: v.to(device) for k, v in inputs.items()}
         with torch.no_grad():
             vecs = model.get_image_features(**inputs)
             vecs = vecs / vecs.norm(dim=-1, keepdim=True)  # L2-normalize
 
-        all_vecs.append(vecs.numpy().astype(np.float32))
+        all_vecs.append(vecs.cpu().numpy().astype(np.float32))
         all_ids.extend(valid_ids)
 
         done = min(i + batch_size, len(rows))
