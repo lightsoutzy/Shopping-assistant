@@ -1,7 +1,10 @@
-# Backend-only requirements — used by Railway.
-# Includes torch/transformers for CLIP-based image search at query time.
-# Note: Railway build will take ~15 min on first deploy due to torch download.
+# Backend-only requirements — used by Railway (via nixpacks.toml).
+# torch is pinned to the CPU-only build to keep the Railway image under 4 GB.
+# The CUDA build from PyPI (~3.5 GB installed) exceeds Railway's 4 GB image limit;
+# the CPU build (~800 MB installed) does not. CLIP inference is CPU-bound at demo scale.
 # For local development, use requirements.txt instead.
+
+--extra-index-url https://download.pytorch.org/whl/cpu
 
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
@@ -12,5 +15,5 @@ scikit-learn==1.4.2
 Pillow==10.3.0
 python-dotenv==1.0.1
 pyarrow>=14.0.0
-torch==2.3.0
+torch==2.3.0+cpu
 transformers==4.40.0
