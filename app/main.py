@@ -1,3 +1,4 @@
+import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -6,6 +7,22 @@ from fastapi.staticfiles import StaticFiles
 
 from app.data.catalog_loader import load_catalog
 from app.services.retriever import TfidfRetriever
+
+
+def _load_clip_background(app, store):
+    """Load CLIP model in a background thread so /health is available immediately."""
+    try:
+        from app.services.image_search import build_image_index, load_clip_model
+        print("Loading CLIP model for image search (background) ...", flush=True)
+        processor, model = load_clip_model()
+        app.state.image_index = build_image_index(
+            store.embeddings, store.embedding_ids, store.df
+        )
+        app.state.clip_processor = processor
+        app.state.clip_model = model
+        print("  Image search ready.", flush=True)
+    except Exception as e:
+        print(f"  Warning: image search unavailable ({e}).", flush=True)
 
 
 @asynccontextmanager
@@ -31,20 +48,11 @@ async def lifespan(app: FastAPI):
     app.state.clip_model = None
 
     if store.embeddings is not None:
-        try:
-            from app.services.image_search import build_image_index, load_clip_model
-            print("Loading CLIP model for image search ...")
-            processor, model = load_clip_model()
-            app.state.image_index = build_image_index(
-                store.embeddings, store.embedding_ids, store.df
-            )
-            app.state.clip_processor = processor
-            app.state.clip_model = model
-            print("  Image search ready.")
-        except Exception as e:
-            print(f"  Warning: image search unavailable ({e}).")
+        threading.Thread(
+            target=_load_clip_background, args=(app, store), daemon=True
+        ).start()
 
-    yield  # app is running
+    yield  # /health available immediately; CLIP loads in background
 
     # ── shutdown (nothing to release) ─────────────────────────────────────────
 
