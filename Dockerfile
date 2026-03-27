@@ -8,6 +8,17 @@ WORKDIR /app
 COPY requirements-backend.txt .
 RUN pip install --no-cache-dir -r requirements-backend.txt
 
+# Pre-download CLIP model weights into the image layer.
+# Without this, CLIPModel.from_pretrained() downloads ~600 MB from Hugging Face
+# inside the FastAPI lifespan hook at container start, which blocks /health for
+# 2-5 minutes and causes Railway's 60-second healthcheck to time out and kill
+# the replica. Baking the weights here makes startup load from local cache in < 2s.
+RUN python -c "\
+from transformers import CLIPProcessor, CLIPModel; \
+CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32'); \
+CLIPModel.from_pretrained('openai/clip-vit-base-patch32'); \
+print('CLIP model cached.')"
+
 # Copy only what the backend needs at runtime.
 COPY app/ ./app/
 COPY data/processed/ ./data/processed/

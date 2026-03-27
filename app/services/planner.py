@@ -16,6 +16,7 @@ Action labels:
   next_result           - user wants next items from accepted pool
   reset_context         - start over
   out_of_scope          - not shopping-related
+  bundle_search         - 2-item combo/outfit request (e.g. hoodie + sneaker)
 """
 
 import json

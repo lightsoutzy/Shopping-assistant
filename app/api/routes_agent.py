@@ -10,13 +10,10 @@ Orchestration flow:
 
 import base64
 import io
-import logging
 import re
 import uuid
 
 from fastapi import APIRouter, HTTPException, Request
-
-logger = logging.getLogger("agent")
 
 from app import config
 from app.schemas import (

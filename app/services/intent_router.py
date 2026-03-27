@@ -1,6 +1,10 @@
 """
 Rule-based intent classifier. No LLM used here.
 
+NOTE: This module is the legacy single-turn classifier. The active runtime uses
+planner.py (which imports patterns from here). intent_router.py is kept because
+tests/test_intent_router.py validates its regex patterns directly.
+
 Intent labels (legacy / single-turn):
   general_chat        - greetings, identity, capability questions
   recommend_products  - text-based product search / filtering

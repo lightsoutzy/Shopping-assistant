@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py:*)",
+      "Bash(find /c/Users/taoyo/commerce_agent -name *.parquet -o -name *.npy -o -name *.csv)",
+      "Bash(python:*)",
+      "Bash(grep -E \"\\\\.\\(py|txt|md\\)$\")",
+      "Bash(find /c/Users/taoyo/commerce_agent/tests -type f -name *.py)",
+      "Bash(pip show:*)",
+      "Bash(/dev/null ls:*)",
+      "Bash(python3.12 -c \"import anthropic, httpx; print\\(''anthropic:'', anthropic.__version__\\); print\\(''httpx:'', httpx.__version__\\)\")",
+      "Bash(\"C:/Users/taoyo/AppData/Local/Programs/Python/Python312/python.exe\" -c \"import anthropic, httpx; print\\(''anthropic:'', anthropic.__version__\\); print\\(''httpx:'', httpx.__version__\\)\")",
+      "Bash(\"C:/Users/taoyo/AppData/Local/Programs/Python/Python312/python.exe\" -m pip install \"anthropic>=0.40.0\")",
+      "Bash(\"C:/Users/taoyo/AppData/Local/Programs/Python/Python312/python.exe\" -m pytest tests/test_query_parser.py tests/test_orchestrator.py tests/test_judge.py tests/test_llm_first.py -q 2>&1)",
+      "Bash(\"C:/Users/taoyo/AppData/Local/Programs/Python/Python312/python.exe\" -m pip install pytest -q)",
+      "Bash(grep -E '\\\\.py$')",
+      "Bash(find C:/Users/taoyo/commerce_agent -type f -not -path */__pycache__/* -not -name *.pyc -not -path */.pytest_cache/*)",
+      "Bash(wc -l C:/Users/taoyo/commerce_agent/data/catalog_thumbnails/*.jpg)",
+      "Bash(ls -1 C:/Users/taoyo/commerce_agent/data/catalog_thumbnails/*.jpg)",
+      "WebFetch(domain:pypi.org)"
+    ]
+  }
+}
