@@ -139,6 +139,14 @@ docs/
 
 ---
 
+## Dataset
+
+The catalog is built from the [Kaggle Fashion Product Images Dataset](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset/data) (Param Aggarwal). Download the full dataset and set `DATASET_ROOT` to the extracted folder path before running the preprocessing step.
+
+The preprocessing pipeline selects a subset of categories (t-shirts, shirts, jackets, hoodies, sneakers, shoes, shorts, bags), cleans the metadata, generates mock prices, and produces `catalog.parquet` and CLIP embeddings. The processed artifacts are committed to the repo so deployed services never need the raw dataset.
+
+---
+
 ## Setup
 
 ### 1. Clone and install
