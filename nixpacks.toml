@@ -6,4 +6,7 @@
 # torch to the CPU-only build (~800 MB) keeping the total image under 2 GB.
 
 [phases.install]
-cmds = ["pip install --no-cache-dir -r requirements-backend.txt"]
+cmds = [
+  "python -m pip install --upgrade pip",
+  "python -m pip install --no-cache-dir -r requirements-backend.txt",
+]
