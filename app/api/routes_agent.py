@@ -1115,11 +1115,6 @@ def agent(req: AgentRequest, request: Request):
         f"planner={action}  ({decision.reasoning})",
         flush=True,
     )
-    logger.info(
-        "[AGENT] text=%r has_image=%s active=%d planner=%s",
-        req.text[:80], bool(req.image_b64), len(req.active_products), action,
-    )
-
     # ── Non-retrieval actions ─────────────────────────────────────────────────
 
     if action == "reset_context":
